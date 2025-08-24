@@ -13,6 +13,7 @@
 #ifndef BOOST_UNORDERED_DETAIL_FOA_CORE_HPP
 #define BOOST_UNORDERED_DETAIL_FOA_CORE_HPP
 
+#error expected error
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
 #include <boost/config/workaround.hpp>
