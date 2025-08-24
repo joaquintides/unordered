@@ -109,7 +109,7 @@
  * architectures.
  */
 
-#if 1||BOOST_ARCH_ARM
+#if BOOST_ARCH_ARM
 /* Cache line size can't be known at compile time, so we settle on
  * the very frequent value of 64B.
  */
