@@ -1757,11 +1757,7 @@ public:
           mask&=mask-1;
         }while(mask);
       }
-      if(BOOST_LIKELY(pg->is_not_overflowed(hash))){
-        BOOST_UNORDERED_ADD_STATS(
-          cstats.unsuccessful_lookup,(pb.length(),num_cmps));
-        return {};
-      }
+      if(BOOST_LIKELY(pg->is_not_overflowed(hash)))break;
     }
     while(BOOST_LIKELY(pb.next(arrays.groups_size_mask)));
     BOOST_UNORDERED_ADD_STATS(
