@@ -1793,7 +1793,7 @@ public:
           mask&=mask-1;
         }while(mask);
       }
-      if(false&&BOOST_LIKELY(pg->is_not_overflowed(hash)))break;
+      if(BOOST_LIKELY(pg->is_not_overflowed(hash)))break;
     }
     while(BOOST_LIKELY(pb.next(arrays.groups_size_mask)));
     BOOST_UNORDERED_ADD_STATS(
