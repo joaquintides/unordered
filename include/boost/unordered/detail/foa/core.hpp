@@ -1724,7 +1724,7 @@ public:
   BOOST_FORCEINLINE locator find(const Key& x)const
   {
     auto hash=hash_for(x);
-    return find(x,position_for(hash),hash);
+    return find2(x,position_for(hash),hash);
   }
 
 #if defined(BOOST_MSVC)
@@ -1760,6 +1760,40 @@ public:
         }while(mask);
       }
       if(BOOST_LIKELY(pg->is_not_overflowed(hash)))break;
+    }
+    while(BOOST_LIKELY(pb.next(arrays.groups_size_mask)));
+    BOOST_UNORDERED_ADD_STATS(
+      cstats.unsuccessful_lookup,(pb.length(),num_cmps));
+    return {};
+  }
+
+  template<typename Key>
+  BOOST_FORCEINLINE locator find2(
+    const Key& x,std::size_t pos0,std::size_t hash)const
+  {    
+    BOOST_UNORDERED_STATS_COUNTER(num_cmps);
+    prober pb(pos0);
+    do{
+      auto pos=pb.get();
+      auto pg=arrays.groups()+pos;
+      auto mask=pg->match(hash);
+      if(mask){
+        auto elements=arrays.elements();
+        BOOST_UNORDERED_ASSUME(elements!=nullptr);
+        auto p=elements+pos*N;
+        BOOST_UNORDERED_PREFETCH_ELEMENTS(p,N);
+        do{
+          BOOST_UNORDERED_INCREMENT_STATS_COUNTER(num_cmps);
+          auto n=unchecked_countr_zero(mask);
+          if(BOOST_LIKELY(bool(pred()(x,key_from(p[n]))))){
+            BOOST_UNORDERED_ADD_STATS(
+              cstats.successful_lookup,(pb.length(),num_cmps));
+            return {pg,n,p+n};
+          }
+          mask&=mask-1;
+        }while(mask);
+      }
+      if(false&&BOOST_LIKELY(pg->is_not_overflowed(hash)))break;
     }
     while(BOOST_LIKELY(pb.next(arrays.groups_size_mask)));
     BOOST_UNORDERED_ADD_STATS(
