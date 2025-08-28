@@ -1028,7 +1028,7 @@ struct table_arrays
 
   using value_type=Value;
   using group_type=Group;
-  static constexpr auto N=16;//group_type::N;
+  static constexpr auto N=group_type::N;
   using size_policy=SizePolicy;
   using value_type_pointer=
     typename boost::allocator_pointer<allocator_type>::type;
@@ -1441,7 +1441,7 @@ table_core:empty_value<Hash,0>,empty_value<Pred,1>,empty_value<Allocator,2>
 public:
   using type_policy=TypePolicy;
   using group_type=Group;
-  static constexpr auto N=16;//group_type::N;
+  static constexpr auto N=group_type::N;
   using size_policy=pow2_size_policy;
   using prober=pow2_quadratic_prober;
   using mix_policy=typename std::conditional<
