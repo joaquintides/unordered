@@ -219,12 +219,12 @@ static constexpr std::size_t default_bucket_count=0;
 template<template<typename> class IntegralWrapper>
 struct group15
 {
-  static constexpr std::size_t N=15;
+  static constexpr std::size_t N=16;
   static constexpr bool        regular_layout=true;
 
   struct dummy_group_type
   {
-    alignas(16) unsigned char storage[N+1]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0};
+    alignas(16) unsigned char storage[15+1]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0};
   };
 
   inline void initialize()
@@ -235,7 +235,7 @@ struct group15
 
   inline void set(std::size_t pos,std::size_t hash)
   {
-    BOOST_ASSERT(pos<N);
+    BOOST_ASSERT(pos<15);
     at(pos)=reduced_hash(hash);
   }
 
@@ -246,7 +246,7 @@ struct group15
 
   inline bool is_sentinel(std::size_t pos)const
   {
-    BOOST_ASSERT(pos<N);
+    BOOST_ASSERT(pos<15);
     return at(pos)==sentinel_;
   }
 
@@ -257,7 +257,7 @@ struct group15
 
   inline void reset(std::size_t pos)
   {
-    BOOST_ASSERT(pos<N);
+    BOOST_ASSERT(pos<15);
     at(pos)=available_;
   }
 
@@ -316,7 +316,7 @@ struct group15
 
   inline bool is_occupied(std::size_t pos)const
   {
-    BOOST_ASSERT(pos<N);
+    BOOST_ASSERT(pos<15);
     return at(pos)!=available_;
   }
 
@@ -423,12 +423,12 @@ private:
 
   inline slot_type& overflow()
   {
-    return at(N);
+    return at(15);
   }
 
   inline const slot_type& overflow()const
   {
-    return at(N);
+    return at(15);
   }
 
   alignas(16) slot_type m[16];
@@ -1577,7 +1577,7 @@ public:
     static constexpr std::size_t small_capacity=2*N-1;
 
     auto capacity_=capacity();
-    if(capacity_<=small_capacity){
+    if(false&&capacity_<=small_capacity){
       return capacity_; /* we allow 100% usage */
     }
     else{
@@ -2005,7 +2005,8 @@ public:
   static inline int match_really_occupied(group_type* pg,group_type* last)
   {
     /* excluding the sentinel */
-    return pg->match_occupied()&~(int(pg==last-1)<<(N-1));
+    //return pg->match_occupied()&~(int(pg==last-1)<<(N-1));
+    return pg->match_occupied()&~(int(pg==last-1)<<(15-1));
   }
 
   template<typename... Args>
