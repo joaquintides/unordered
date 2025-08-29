@@ -1274,7 +1274,7 @@ _STL_RESTORE_DEPRECATED_WARNING
  * needing to pull it from an instantiated class template such as the table
  * class.
  */
-static constexpr float mlf=0.8f;
+static constexpr float mlf=0.8f*15/16;
 
 template<typename Group,typename Element>
 struct table_locator
